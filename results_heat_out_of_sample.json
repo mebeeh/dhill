@@ -1,0 +1,46 @@
+{
+ "Makkah": {
+  "train_nonnull": 1464,
+  "thr_2016_2020": [
+   44.7,
+   45.5,
+   46.4
+  ],
+  "v11_days_per_yr_2021_2025": 4.8,
+  "train_days": 19.0,
+  "v10_days_per_yr_2021_2025": 53.0
+ },
+ "Jeddah": {
+  "train_nonnull": 1823,
+  "thr_2016_2020": [
+   39.2,
+   40.6,
+   41.6
+  ],
+  "v11_days_per_yr_2021_2025": 31.0,
+  "train_days": 19.2,
+  "v10_days_per_yr_2021_2025": 6.4
+ },
+ "Riyadh": {
+  "train_nonnull": 895,
+  "thr_2016_2020": [
+   43.0,
+   44.0,
+   45.0
+  ],
+  "v11_days_per_yr_2021_2025": 62.4,
+  "train_days": 25.7,
+  "v10_days_per_yr_2021_2025": 87.4
+ },
+ "Madinah": {
+  "train_nonnull": 1811,
+  "thr_2016_2020": [
+   44.1,
+   45.0,
+   46.0
+  ],
+  "v11_days_per_yr_2021_2025": 40.6,
+  "train_days": 26.4,
+  "v10_days_per_yr_2021_2025": 93.8
+ }
+}

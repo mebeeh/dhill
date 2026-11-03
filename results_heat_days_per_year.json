@@ -1,0 +1,78 @@
+{
+ "Makkah": {
+  "v10_days_per_yr": 53.0,
+  "v11_days_per_yr": 20.6,
+  "v10_by_year": [
+   53,
+   34,
+   68,
+   23,
+   87
+  ],
+  "v11_by_year": [
+   24,
+   11,
+   31,
+   6,
+   31
+  ],
+  "v11_longest_run": 13
+ },
+ "Jeddah": {
+  "v10_days_per_yr": 6.4,
+  "v11_days_per_yr": 19.4,
+  "v10_by_year": [
+   3,
+   5,
+   6,
+   7,
+   11
+  ],
+  "v11_by_year": [
+   9,
+   11,
+   23,
+   21,
+   33
+  ],
+  "v11_longest_run": 7
+ },
+ "Riyadh": {
+  "v10_days_per_yr": 87.4,
+  "v11_days_per_yr": 20.2,
+  "v10_by_year": [
+   94,
+   73,
+   94,
+   97,
+   79
+  ],
+  "v11_by_year": [
+   20,
+   16,
+   26,
+   26,
+   13
+  ],
+  "v11_longest_run": 10
+ },
+ "Madinah": {
+  "v10_days_per_yr": 93.8,
+  "v11_days_per_yr": 18.8,
+  "v10_by_year": [
+   96,
+   96,
+   100,
+   89,
+   88
+  ],
+  "v11_by_year": [
+   28,
+   13,
+   18,
+   24,
+   11
+  ],
+  "v11_longest_run": 7
+ }
+}

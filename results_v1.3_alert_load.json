@@ -1,0 +1,106 @@
+{
+ "makkah": {
+  "days_with_data": 1826,
+  "low-risk only (statin, PPI)": {
+   "amber_per_year": 0,
+   "red_per_year": 0
+  },
+  "one moderate (metformin)": {
+   "amber_per_year": 191,
+   "red_per_year": 0
+  },
+  "one high-risk (furosemide)": {
+   "amber_per_year": 191,
+   "red_per_year": 0
+  },
+  "two high-risk (furosemide + lisinopril)": {
+   "amber_per_year": 170,
+   "red_per_year": 21
+  },
+  "dangerous mix (HCTZ + losartan + diclofenac)": {
+   "amber_per_year": 174,
+   "red_per_year": 191
+  },
+  "preheat_heads_up_per_year": 19,
+  "very_hot_days_per_year": 21,
+  "days_38_plus_per_year": 191
+ },
+ "jeddah": {
+  "days_with_data": 1826,
+  "low-risk only (statin, PPI)": {
+   "amber_per_year": 0,
+   "red_per_year": 0
+  },
+  "one moderate (metformin)": {
+   "amber_per_year": 109,
+   "red_per_year": 0
+  },
+  "one high-risk (furosemide)": {
+   "amber_per_year": 109,
+   "red_per_year": 0
+  },
+  "two high-risk (furosemide + lisinopril)": {
+   "amber_per_year": 90,
+   "red_per_year": 19
+  },
+  "dangerous mix (HCTZ + losartan + diclofenac)": {
+   "amber_per_year": 256,
+   "red_per_year": 109
+  },
+  "preheat_heads_up_per_year": 22,
+  "very_hot_days_per_year": 19,
+  "days_38_plus_per_year": 109
+ },
+ "riyadh": {
+  "days_with_data": 1826,
+  "low-risk only (statin, PPI)": {
+   "amber_per_year": 0,
+   "red_per_year": 0
+  },
+  "one moderate (metformin)": {
+   "amber_per_year": 163,
+   "red_per_year": 0
+  },
+  "one high-risk (furosemide)": {
+   "amber_per_year": 163,
+   "red_per_year": 0
+  },
+  "two high-risk (furosemide + lisinopril)": {
+   "amber_per_year": 143,
+   "red_per_year": 20
+  },
+  "dangerous mix (HCTZ + losartan + diclofenac)": {
+   "amber_per_year": 202,
+   "red_per_year": 163
+  },
+  "preheat_heads_up_per_year": 12,
+  "very_hot_days_per_year": 20,
+  "days_38_plus_per_year": 163
+ },
+ "madinah": {
+  "days_with_data": 1826,
+  "low-risk only (statin, PPI)": {
+   "amber_per_year": 0,
+   "red_per_year": 0
+  },
+  "one moderate (metformin)": {
+   "amber_per_year": 177,
+   "red_per_year": 0
+  },
+  "one high-risk (furosemide)": {
+   "amber_per_year": 177,
+   "red_per_year": 0
+  },
+  "two high-risk (furosemide + lisinopril)": {
+   "amber_per_year": 158,
+   "red_per_year": 19
+  },
+  "dangerous mix (HCTZ + losartan + diclofenac)": {
+   "amber_per_year": 188,
+   "red_per_year": 177
+  },
+  "preheat_heads_up_per_year": 13,
+  "very_hot_days_per_year": 19,
+  "days_38_plus_per_year": 177
+ }
+}

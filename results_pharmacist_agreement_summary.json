@@ -1,0 +1,33 @@
+{
+ "note": "Counts only. 50 fictional cases rated blind by one clinical pharmacist (Mansoura University Hospital) on 3 Nov 2026; case-level ratings are not published. v1.2 and v1.3 were written after seeing the ratings, so their scores are not a validation.",
+ "v1.1": {
+  "same_colour": 20,
+  "weighted_kappa_linear": 0.34,
+  "less_cautious": 30,
+  "more_cautious": 0,
+  "pharmacist_red_or_emergency_called_green_or_amber": 20,
+  "pharmacist_red_or_emergency": 34,
+  "pharmacist_emergency_called_red": 2,
+  "pharmacist_emergency": 5
+ },
+ "v1.2": {
+  "same_colour": 44,
+  "weighted_kappa_linear": 0.83,
+  "less_cautious": 5,
+  "more_cautious": 1,
+  "pharmacist_red_or_emergency_called_green_or_amber": 4,
+  "pharmacist_red_or_emergency": 34,
+  "pharmacist_emergency_called_red": 1,
+  "pharmacist_emergency": 5
+ },
+ "v1.3": {
+  "same_colour": 45,
+  "weighted_kappa_linear": 0.85,
+  "less_cautious": 1,
+  "more_cautious": 4,
+  "pharmacist_red_or_emergency_called_green_or_amber": 0,
+  "pharmacist_red_or_emergency": 34,
+  "pharmacist_emergency_called_red": 1,
+  "pharmacist_emergency": 5
+ }
+}

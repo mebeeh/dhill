@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important} body{margin:0} img{max-width:100%}.live-src { margin: 0; }
+.count b, .count span { color: var(--st-ink, var(--st)); }
+.btn.replay { font-size: .85rem; padding: 6px 12px; }
+.notice.ahead { background: var(--warn-soft); color: var(--warn-ink); }
+.pt-head .pill + .pill { margin-inline-start: 4px; }
+</style>
+<title>Dhill Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Reem+Kufi:wght@500;700&display=swap">
+<style>
+/* Layout: one app column (header · demo strip · tabs · view), widening to two columns for Today on desktop. Shade-blue ground, sun-amber only for heat. */
+:root {
+  --bg: #F2F6F7; --surface: #FFFFFF; --surface-2: #E6EFF1; --ink: #0D1D22; --muted: #566B71; --line: #D2DFE2;
+  --accent: #00778A; --accent-ink: #FFFFFF; --accent-soft: #D9EEF1;
+  --sun: #C56A00; --ok: #17865A; --warn: #B86E00; --bad: #C9372F; --emerg: #8A1240;
+  --ok-soft: #DDF3E9; --warn-soft: #FBEBD3; --bad-soft: #F9DEDC; --emerg-soft: #F3D9E3; --pend-soft: #E9EEF0;
+  --sun-ink: #8F4E00; --ok-ink: #127047; --warn-ink: #8F4E00; --bad-ink: #A82A23; --emerg-ink: #8A1240; --muted-ink: #4F6369;
+  --display: "Reem Kufi", "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --body: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+  --r: 14px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #08141A; --surface: #0E1F26; --surface-2: #142A32; --ink: #E6F2F4; --muted: #94ABB1; --line: #21383F;
+  --accent: #2FD5EC; --accent-ink: #04161B; --accent-soft: #0F3540;
+  --sun: #FFB547; --ok: #3DDC97; --warn: #FFB547; --bad: #FF6B63; --emerg: #FF7AA8;
+  --ok-soft: #0F3326; --warn-soft: #3A2A0D; --bad-soft: #3D1614; --emerg-soft: #3B1426; --pend-soft: #1A2C33;
+  --sun-ink: #FFB547; --ok-ink: #3DDC97; --warn-ink: #FFB547; --bad-ink: #FF6B63; --emerg-ink: #FF7AA8; --muted-ink: #94ABB1;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #08141A; --surface: #0E1F26; --surface-2: #142A32; --ink: #E6F2F4; --muted: #94ABB1; --line: #21383F;
+  --accent: #2FD5EC; --accent-ink: #04161B; --accent-soft: #0F3540;
+  --sun: #FFB547; --ok: #3DDC97; --warn: #FFB547; --bad: #FF6B63; --emerg: #FF7AA8;
+  --ok-soft: #0F3326; --warn-soft: #3A2A0D; --bad-soft: #3D1614; --emerg-soft: #3B1426; --pend-soft: #1A2C33;
+  --sun-ink: #FFB547; --ok-ink: #3DDC97; --warn-ink: #FFB547; --bad-ink: #FF6B63; --emerg-ink: #FF7AA8; --muted-ink: #94ABB1;
+  color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.6; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 16px; padding-block: 0 40px; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.num { font-variant-numeric: tabular-nums; }
+h1, h2, h3 { margin: 0; line-height: 1.3; text-wrap: balance; }
+h2 { font-family: var(--display); font-weight: 700; font-size: 1.35rem; }
+h3 { font-size: 1rem; font-weight: 700; }
+p { margin: 0; }
+
+/* header */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+.top-in { max-width: 1040px; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; margin-inline-end: auto; }
+.brand-name { font-family: var(--display); font-weight: 700; font-size: 1.6rem; line-height: 1; }
+.brand-tag { color: var(--muted); font-size: .8rem; }
+.seg { display: inline-flex; background: var(--surface-2); border-radius: 999px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: transparent; padding: 6px 14px; border-radius: 999px; font-weight: 600; font-size: .88rem; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgb(0 0 0 / .12); }
+.lang { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font-weight: 600; font-size: .85rem; }
+
+/* demo strip */
+.demo { margin-top: 14px; border: 1.5px dashed var(--line); border-radius: var(--r); padding: 12px 14px; display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; background: var(--surface); }
+.demo-label { font-size: .75rem; font-weight: 700; letter-spacing: .04em; color: var(--sun-ink); background: var(--warn-soft); padding: 2px 10px; border-radius: 999px; }
+.field { display: flex; align-items: center; gap: 8px; font-size: .88rem; color: var(--muted); }
+.field select, .field input[type=number] { background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 5px 10px; color: var(--ink); }
+.field input[type=range] { accent-color: var(--sun); width: 150px; }
+.temp-out { font-weight: 700; color: var(--ink); min-width: 3.2em; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 12px; font-size: .85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+.chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: none; }
+
+/* tabs */
+.tabs { display: flex; gap: 4px; margin-top: 14px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.tabs button { border: 0; background: none; padding: 10px 14px; font-weight: 600; color: var(--muted); border-bottom: 3px solid transparent; white-space: nowrap; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+.view { margin-top: 18px; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; }
+.grid2 { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 860px) { .grid2 { grid-template-columns: 1.15fr 1fr; } }
+.stack { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.muted { color: var(--muted); }
+.small { font-size: .82rem; }
+
+/* status */
+.status { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.ring { width: 132px; height: 132px; border-radius: 50%; border: 10px solid var(--st); background: var(--st-soft); display: grid; place-items: center; flex: none; }
+.ring b { font-family: var(--display); font-size: 1.5rem; color: var(--st-ink, var(--st)); }
+.st-green { --st-ink: var(--ok-ink); --st: var(--ok); --st-soft: var(--ok-soft); }
+.st-amber { --st-ink: var(--warn-ink); --st: var(--warn); --st-soft: var(--warn-soft); }
+.st-red { --st-ink: var(--bad-ink); --st: var(--bad); --st-soft: var(--bad-soft); }
+.st-emergency { --st-ink: var(--emerg-ink); --st: var(--emerg); --st-soft: var(--emerg-soft); }
+.st-pending { --st-ink: var(--muted-ink); --st: var(--muted); --st-soft: var(--pend-soft); }
+.headline { font-family: var(--display); font-size: 1.45rem; font-weight: 700; }
+.who { color: var(--muted); font-size: .9rem; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; font-size: .78rem; font-weight: 700; background: var(--st-soft); color: var(--st-ink, var(--st)); }
+.actions { margin: 0; padding-inline-start: 1.1em; display: grid; gap: 6px; }
+.notice { border-radius: 10px; padding: 10px 12px; background: var(--st-soft); color: var(--ink); font-weight: 600; font-size: .9rem; }
+.reasons { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.reasons li { display: flex; gap: 10px; align-items: flex-start; }
+.reasons .dot { margin-top: .55em; background: var(--accent); }
+
+/* forecast */
+.fc { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.fc-day { border-radius: 12px; padding: 10px 12px; background: var(--surface-2); }
+.fc-temp { font-size: 1.7rem; font-weight: 700; line-height: 1.1; }
+.lv0 { --st-ink: var(--ok-ink); --st: var(--ok); --st-soft: var(--ok-soft); }
+.lv1 { --st-ink: var(--warn-ink); --st: var(--warn); --st-soft: var(--warn-soft); }
+.lv2 { --st-ink: var(--sun-ink); --st: var(--sun); --st-soft: var(--warn-soft); }
+.lv3 { --st-ink: var(--bad-ink); --st: var(--bad); --st-soft: var(--bad-soft); }
+.fc-day.today { outline: 2px solid var(--st); }
+
+/* meds */
+.med { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-top: 1px solid var(--line); }
+.med:first-child { border-top: 0; }
+.med-main { flex: 1; min-width: 0; }
+.med-name { font-weight: 700; }
+.risk-H { --st-ink: var(--bad-ink); --st: var(--bad); --st-soft: var(--bad-soft); }
+.risk-M { --st-ink: var(--warn-ink); --st: var(--warn); --st-soft: var(--warn-soft); }
+.risk-L { --st-ink: var(--ok-ink); --st: var(--ok); --st-soft: var(--ok-soft); }
+.x { border: 1px solid var(--line); background: var(--surface); width: 30px; height: 30px; border-radius: 50%; line-height: 1; color: var(--muted); flex: none; }
+.btn { border: 0; background: var(--accent); color: var(--accent-ink); font-weight: 700; padding: 10px 18px; border-radius: 12px; }
+.btn.ghost { background: var(--surface-2); color: var(--ink); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+/* check form */
+form.check { display: grid; gap: 14px; }
+.toggles { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.tog { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: var(--surface); font-weight: 600; }
+.tog input { width: 20px; height: 20px; accent-color: var(--accent); }
+.tog.warn-tog { border-color: var(--emerg); }
+.bp { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.bp .field input { width: 5.2em; }
+fieldset { border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin: 0; }
+legend { padding-inline: 6px; font-weight: 700; font-size: .9rem; }
+
+/* board */
+.counts { display: flex; flex-wrap: wrap; gap: 8px; }
+.count { border-radius: 12px; padding: 8px 14px; background: var(--st-soft); min-width: 92px; }
+.count b { display: block; font-size: 1.5rem; color: var(--st); line-height: 1.1; }
+.pt { display: grid; gap: 10px; border-inline-start: 0; }
+.pt-head { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.pt-name { font-weight: 700; font-size: 1.05rem; }
+.pt-cols { display: grid; gap: 12px; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .pt-cols { grid-template-columns: 1fr 1fr; } }
+.rev { margin: 0; padding-inline-start: 1.1em; display: grid; gap: 4px; }
+.called { color: var(--ok); font-weight: 700; }
+.board-list { display: grid; gap: 12px; }
+.pt.card { box-shadow: inset 0 0 0 0 transparent; }
+.pt.card.prio { border-color: var(--st); }
+
+/* how */
+.how { display: grid; gap: 16px; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+th, td { text-align: start; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+.tbl { overflow-x: auto; }
+.foot { margin-top: 28px; color: var(--muted); font-size: .8rem; text-align: center; }
+.toast { position: fixed; inset-inline: 0; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); margin: 0 auto; width: max-content; max-width: calc(100% - 32px); background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 999px; font-weight: 600; z-index: 20; }
+@media (prefers-reduced-motion: no-preference) { .ring { transition: border-color .25s, background .25s; } }
+</style>
+
+</head>
+<body>
+<header class="top"><div class="top-in" id="top"></div></header>
+<main class="wrap">
+  <section class="demo" id="demo" aria-label="Demo controls"></section>
+  <nav class="tabs" id="tabs" role="tablist"></nav>
+  <section class="view" id="view"></section>
+  <p class="foot" id="foot"></p>
+</main>
+<div class="toast" id="toast" hidden></div>
+
+<script>/* Dhill demo rule engine (v1.3) — shared by the page and the test script. Fictional demo, not for clinical use. */
+(function (root) {
+  const CLASSES = {
+    loop: { risk: 'H', sick: true, en: 'Loop diuretic', ar: 'مدرّ عروي',
+      whyEn: 'Raises fluid and salt loss, so dehydration and low blood pressure come faster on hot days.',
+      whyAr: 'يزيد فقد السوائل والأملاح، فيأتي الجفاف وهبوط الضغط أسرع في الأيام الحارة.',
+      revEn: 'Consider a temporary hold or lower dose (sick-day guidance).',
+      revAr: 'النظر في إيقاف مؤقت أو خفض الجرعة (إرشادات أيام المرض).' },
+    thiazide: { risk: 'H', sick: true, en: 'Thiazide diuretic', ar: 'مدرّ ثيازيدي',
+      whyEn: 'Adds fluid loss and can lower blood sodium in the heat.',
+      whyAr: 'يضيف إلى فقد السوائل وقد يخفض الصوديوم في الدم مع الحر.',
+      revEn: 'Consider a temporary hold (sick-day guidance); check sodium if unwell.',
+      revAr: 'النظر في إيقاف مؤقت (إرشادات أيام المرض)، وفحص الصوديوم عند التعب.' },
+    mra: { risk: 'H', sick: true, en: 'Potassium-sparing diuretic', ar: 'مدرّ حافظ للبوتاسيوم',
+      whyEn: 'With dehydration, potassium can rise and the kidneys can be injured.',
+      whyAr: 'مع الجفاف قد يرتفع البوتاسيوم وتتأذى الكلى.',
+      revEn: 'Consider a temporary hold (sick-day guidance); check potassium.',
+      revAr: 'النظر في إيقاف مؤقت (إرشادات أيام المرض)، وفحص البوتاسيوم.' },
+    acei: { risk: 'H', sick: true, en: 'ACE inhibitor', ar: 'مثبط الإنزيم المحوّل',
+      whyEn: 'Limits how well the kidneys protect their filtration when fluids are low.',
+      whyAr: 'يحدّ من قدرة الكلى على حماية الترشيح عند نقص السوائل.',
+      revEn: 'Consider a temporary hold (sick-day guidance).',
+      revAr: 'النظر في إيقاف مؤقت (إرشادات أيام المرض).' },
+    arb: { risk: 'H', sick: true, en: 'Angiotensin receptor blocker', ar: 'حاصر مستقبلات الأنجيوتنسين',
+      whyEn: 'Limits how well the kidneys protect their filtration when fluids are low.',
+      whyAr: 'يحدّ من قدرة الكلى على حماية الترشيح عند نقص السوائل.',
+      revEn: 'Consider a temporary hold (sick-day guidance).',
+      revAr: 'النظر في إيقاف مؤقت (إرشادات أيام المرض).' },
+    sglt2: { risk: 'H', sick: true, en: 'SGLT2 inhibitor', ar: 'مثبط SGLT2',
+      whyEn: 'Removes sugar and water in urine; dehydration and ketoacidosis risk when unwell.',
+      whyAr: 'يُخرج السكر والماء في البول، فيرفع خطر الجفاف والحماض الكيتوني عند التعب.',
+      revEn: 'Consider a temporary hold (sick-day guidance).',
+      revAr: 'النظر في إيقاف مؤقت (إرشادات أيام المرض).' },
+    nsaid: { risk: 'H', sick: true, en: 'NSAID pain-killer', ar: 'مسكّن مضاد للالتهاب (NSAID)',
+      whyEn: 'Reduces blood flow to the kidneys; risky when combined with dehydration.',
+      whyAr: 'يقلل تدفق الدم إلى الكلى، وهو خطر مع الجفاف.',
+      revEn: 'Advise holding; offer an alternative such as paracetamol if suitable.',
+      revAr: 'النصح بإيقافه، واقتراح بديل مثل الباراسيتامول إن كان مناسبًا.' },
+    lithium: { risk: 'H', sick: false, en: 'Lithium', ar: 'الليثيوم',
+      whyEn: 'Dehydration can push lithium to toxic levels.',
+      whyAr: 'الجفاف قد يرفع الليثيوم إلى مستوى سام.',
+      revEn: 'Consider an urgent lithium level and prescriber review.',
+      revAr: 'النظر في فحص عاجل لمستوى الليثيوم ومراجعة الطبيب الواصف.' },
+    metformin: { risk: 'M', sick: true, en: 'Metformin', ar: 'ميتفورمين',
+      whyEn: 'If the kidneys are stressed, the risk of lactic acidosis rises.',
+      whyAr: 'إذا تأثرت الكلى يرتفع خطر الحماض اللبني.',
+      revEn: 'Consider a temporary hold while unwell (sick-day guidance).',
+      revAr: 'النظر في إيقاف مؤقت أثناء التعب (إرشادات أيام المرض).' },
+    su: { risk: 'M', sick: false, en: 'Sulfonylurea', ar: 'سلفونيل يوريا',
+      whyEn: 'Eating and drinking less on hot days can cause low blood sugar.',
+      whyAr: 'قلة الأكل والشرب في الحر قد تسبب هبوط السكر.',
+      revEn: 'Review the dose and advise glucose checks.',
+      revAr: 'مراجعة الجرعة والنصح بقياس السكر.' },
+    antipsych: { risk: 'M', sick: false, en: 'Antipsychotic', ar: 'مضاد ذهان',
+      whyEn: 'Can impair the body’s temperature control.',
+      whyAr: 'قد يضعف تنظيم الجسم لحرارته.',
+      revEn: 'Reinforce cooling; prescriber review if symptomatic.',
+      revAr: 'التأكيد على التبريد، ومراجعة الطبيب عند ظهور أعراض.' },
+    anticholin: { risk: 'M', sick: false, en: 'Anticholinergic', ar: 'مضاد للكولين',
+      whyEn: 'Reduces sweating, so the body cools less.',
+      whyAr: 'يقلل التعرق، فيبرد الجسم أقل.',
+      revEn: 'Reinforce cooling; consider whether it is still needed.',
+      revAr: 'التأكيد على التبريد، والنظر في استمرار الحاجة إليه.' },
+    bb: { risk: 'M', sick: false, en: 'Beta-blocker', ar: 'حاصر بيتا',
+      whyEn: 'Limits the heart’s response to heat and can add to dizziness.',
+      whyAr: 'يحدّ من استجابة القلب للحر وقد يزيد الدوخة.',
+      revEn: 'Check blood pressure and pulse; usually continue.',
+      revAr: 'فحص الضغط والنبض؛ يُستمر عليه عادةً.' },
+    ccb: { risk: 'L', sick: false, en: 'Calcium-channel blocker', ar: 'حاصر قنوات الكالسيوم',
+      whyEn: 'Minor concern; watch for dizziness.', whyAr: 'أثر محدود؛ راقب الدوخة.', revEn: '', revAr: '' },
+    statin: { risk: 'L', sick: false, en: 'Statin', ar: 'ستاتين',
+      whyEn: 'No specific heat concern at usual doses.', whyAr: 'لا قلق خاص مع الحر بالجرعات المعتادة.', revEn: '', revAr: '' },
+    ppi: { risk: 'L', sick: false, en: 'Proton-pump inhibitor', ar: 'مثبط مضخة البروتون',
+      whyEn: 'No specific heat concern at usual doses.', whyAr: 'لا قلق خاص مع الحر بالجرعات المعتادة.', revEn: '', revAr: '' },
+    thyroid: { risk: 'L', sick: false, en: 'Thyroid hormone', ar: 'هرمون الغدة الدرقية',
+      whyEn: 'No specific heat concern at usual doses.', whyAr: 'لا قلق خاص مع الحر بالجرعات المعتادة.', revEn: '', revAr: '' },
+    aspirin: { risk: 'L', sick: false, en: 'Low-dose aspirin', ar: 'أسبرين بجرعة منخفضة',
+      whyEn: 'No specific heat concern at low dose.', whyAr: 'لا قلق خاص مع الحر بالجرعة المنخفضة.', revEn: '', revAr: '' },
+    arni: { risk: 'H', sick: true, en: 'ARNI (sacubitril/valsartan)', ar: 'مثبط مستقبلات الأنجيوتنسين والنيبريليسين',
+      whyEn: 'Contains an ARB; same kidney and low-blood-pressure risk when fluids are low.', whyAr: 'يحتوي على حاصر ARB؛ نفس خطر الكلى وهبوط الضغط عند نقص السوائل.',
+      revEn: 'Consider a temporary hold (sick-day guidance).', revAr: 'النظر في إيقاف مؤقت (إرشادات أيام المرض).' },
+    nitrate: { risk: 'M', sick: false, en: 'Nitrate', ar: 'نترات',
+      whyEn: 'Can worsen low blood pressure in the heat.', whyAr: 'قد تزيد هبوط الضغط في الحر.',
+      revEn: 'Check blood pressure on standing; prescriber review if dizzy.', revAr: 'فحص الضغط عند الوقوف ومراجعة الطبيب عند الدوخة.' },
+    ssri: { risk: 'M', sick: false, en: 'SSRI/SNRI antidepressant', ar: 'مضاد اكتئاب SSRI/SNRI',
+      whyEn: 'Alters sweating and can lower blood sodium.', whyAr: 'يغيّر التعرق وقد يخفض الصوديوم.',
+      revEn: 'Check sodium if unwell; usually continue.', revAr: 'فحص الصوديوم عند التعب؛ يُستمر عليه عادةً.' },
+    tca: { risk: 'M', sick: false, en: 'Tricyclic antidepressant', ar: 'مضاد اكتئاب ثلاثي الحلقات',
+      whyEn: 'Reduces sweating and can cause dizziness on standing.', whyAr: 'يقلل التعرق وقد يسبب دوخة عند الوقوف.',
+      revEn: 'Reinforce cooling; prescriber review if symptomatic.', revAr: 'التأكيد على التبريد ومراجعة الطبيب عند الأعراض.' },
+    antiseizure: { risk: 'M', sick: false, en: 'Antiseizure medicine', ar: 'مضاد صرع',
+      whyEn: 'Some (topiramate) reduce sweating; others build up when dehydrated.', whyAr: 'بعضها يقلل التعرق، وبعضها يتراكم مع الجفاف.',
+      revEn: 'Prescriber review if unwell.', revAr: 'مراجعة الطبيب عند التعب.' },
+    sedantihist: { risk: 'M', sick: false, en: 'Sedating antihistamine', ar: 'مضاد هيستامين منوّم',
+      whyEn: 'Anticholinergic: reduces sweating and awareness of heat.', whyAr: 'مضاد للكولين: يقلل التعرق والإحساس بالحر.',
+      revEn: 'Consider avoiding on hot days.', revAr: 'النظر في تجنبه في الأيام الحارة.' },
+    sulfa: { risk: 'M', sick: false, en: 'Sulfonamide antibiotic', ar: 'مضاد حيوي سلفوناميد',
+      whyEn: 'Kidney injury and potassium rise are more likely when dehydrated.', whyAr: 'يزيد خطر أذى الكلى وارتفاع البوتاسيوم مع الجفاف.',
+      revEn: 'Check fluids and kidney function if unwell.', revAr: 'متابعة السوائل ووظائف الكلى عند التعب.' },
+    stimulant: { risk: 'M', sick: false, en: 'Stimulant', ar: 'منبّه',
+      whyEn: 'Raises heat production and blunts heat warnings.', whyAr: 'يرفع إنتاج الحرارة ويخفي علامات الإجهاد الحراري.',
+      revEn: 'Prescriber review on very hot days.', revAr: 'مراجعة الطبيب في الأيام شديدة الحرارة.' },
+    antiplatelet: { risk: 'L', sick: false, en: 'Antiplatelet', ar: 'مضاد صفائح',
+      whyEn: 'Minor concern; listed in CDC heat guidance.', whyAr: 'أثر محدود؛ مذكور في إرشادات CDC.', revEn: '', revAr: '' },
+  };
+
+  const MEDS = {
+    furosemide: { en: 'Furosemide 40 mg', ar: 'فوروسيميد 40 ملغ', cls: 'loop' },
+    hctz: { en: 'Hydrochlorothiazide 25 mg', ar: 'هيدروكلوروثيازيد 25 ملغ', cls: 'thiazide' },
+    indapamide: { en: 'Indapamide 1.5 mg', ar: 'إنداباميد 1.5 ملغ', cls: 'thiazide' },
+    spironolactone: { en: 'Spironolactone 25 mg', ar: 'سبيرونولاكتون 25 ملغ', cls: 'mra' },
+    lisinopril: { en: 'Lisinopril 10 mg', ar: 'ليسينوبريل 10 ملغ', cls: 'acei' },
+    perindopril: { en: 'Perindopril 5 mg', ar: 'بيريندوبريل 5 ملغ', cls: 'acei' },
+    losartan: { en: 'Losartan 50 mg', ar: 'لوسارتان 50 ملغ', cls: 'arb' },
+    valsartan: { en: 'Valsartan 80 mg', ar: 'فالسارتان 80 ملغ', cls: 'arb' },
+    empagliflozin: { en: 'Empagliflozin 10 mg', ar: 'إمباغليفلوزين 10 ملغ', cls: 'sglt2' },
+    dapagliflozin: { en: 'Dapagliflozin 10 mg', ar: 'داباغليفلوزين 10 ملغ', cls: 'sglt2' },
+    ibuprofen: { en: 'Ibuprofen 400 mg', ar: 'إيبوبروفين 400 ملغ', cls: 'nsaid' },
+    diclofenac: { en: 'Diclofenac 50 mg', ar: 'ديكلوفيناك 50 ملغ', cls: 'nsaid' },
+    lithium: { en: 'Lithium carbonate 400 mg', ar: 'كربونات الليثيوم 400 ملغ', cls: 'lithium' },
+    metformin: { en: 'Metformin 1 g', ar: 'ميتفورمين 1 غ', cls: 'metformin' },
+    gliclazide: { en: 'Gliclazide MR 60 mg', ar: 'غليكلازيد 60 ملغ', cls: 'su' },
+    quetiapine: { en: 'Quetiapine 50 mg', ar: 'كيتيابين 50 ملغ', cls: 'antipsych' },
+    oxybutynin: { en: 'Oxybutynin 5 mg', ar: 'أوكسيبوتينين 5 ملغ', cls: 'anticholin' },
+    bisoprolol: { en: 'Bisoprolol 5 mg', ar: 'بيسوبرولول 5 ملغ', cls: 'bb' },
+    amlodipine: { en: 'Amlodipine 5 mg', ar: 'أملوديبين 5 ملغ', cls: 'ccb' },
+    atorvastatin: { en: 'Atorvastatin 20 mg', ar: 'أتورفاستاتين 20 ملغ', cls: 'statin' },
+    omeprazole: { en: 'Omeprazole 20 mg', ar: 'أوميبرازول 20 ملغ', cls: 'ppi' },
+    levothyroxine: { en: 'Levothyroxine 50 mcg', ar: 'ليفوثيروكسين 50 مكغ', cls: 'thyroid' },
+    aspirin81: { en: 'Aspirin 81 mg', ar: 'أسبرين 81 ملغ', cls: 'aspirin' },
+    sacubitril: { en: 'Sacubitril/valsartan 49/51 mg', ar: 'ساكوبيتريل/فالسارتان 49/51 ملغ', cls: 'arni' },
+    isosorbide: { en: 'Isosorbide mononitrate 30 mg', ar: 'إيزوسوربيد أحادي النترات 30 ملغ', cls: 'nitrate' },
+    sertraline: { en: 'Sertraline 50 mg', ar: 'سيرترالين 50 ملغ', cls: 'ssri' },
+    amitriptyline: { en: 'Amitriptyline 25 mg', ar: 'أميتريبتيلين 25 ملغ', cls: 'tca' },
+    topiramate: { en: 'Topiramate 50 mg', ar: 'توبيرامات 50 ملغ', cls: 'antiseizure' },
+    diphenhydramine: { en: 'Diphenhydramine 25 mg', ar: 'ديفينهيدرامين 25 ملغ', cls: 'sedantihist' },
+    cotrimoxazole: { en: 'Co-trimoxazole 960 mg', ar: 'كوتريموكسازول 960 ملغ', cls: 'sulfa' },
+    methylphenidate: { en: 'Methylphenidate 10 mg', ar: 'ميثيلفينيدات 10 ملغ', cls: 'stimulant' },
+    clopidogrel: { en: 'Clopidogrel 75 mg', ar: 'كلوبيدوقرل 75 ملغ', cls: 'antiplatelet' },
+  };
+
+  // Illustrative thresholds for the demo; production would use city-specific percentiles.
+  // v1.1: city-specific thresholds = local P90 / P95 / P97.5 of daily maximum temperature, 2021-2025 (Meteostat station data).
+  const CITY_T = { makkah: [43.6, 44.2, 44.7], jeddah: [40.1, 41.2, 42.2], riyadh: [44.8, 45.5, 46.0], madinah: [45.0, 46.0, 46.6] };
+  let CITY = 'makkah';
+  const OPT = { heatRed: true, comboHot: true, comboRule: '38' };
+  function setOpt(o) { Object.assign(OPT, o); }
+  function setCity(c) { CITY = c; }
+  function heatLevel(t) {
+    const th = CITY_T[CITY];
+    if (t >= th[2]) return 3;
+    if (t >= th[1]) return 2;
+    if (t >= th[0]) return 1;
+    return 0;
+  }
+
+  function medProfile(meds) {
+    const classes = meds.map((m) => MEDS[m] && MEDS[m].cls).filter(Boolean);
+    const has = (c) => classes.includes(c);
+    const highs = classes.filter((c) => CLASSES[c].risk === 'H').length;
+    const mods = classes.filter((c) => CLASSES[c].risk === 'M').length;
+    const triple = (has('loop') || has('thiazide')) && (has('acei') || has('arb') || has('arni')) && has('nsaid');
+    let level = 0;
+    if (triple) level = 3;
+    else if (highs >= 2 || has('lithium')) level = 2;
+    else if (highs === 1 || mods >= 1) level = 1;
+    // v1.2: interaction combinations a pharmacist reviews on any day (CDC 2025; sick-day consensus, Watson 2022)
+    const raas = meds.filter((m) => MEDS[m] && ['acei', 'arb', 'arni'].includes(MEDS[m].cls)).length;
+    const dualRaas = raas >= 2;
+    const lithiumMix = has('lithium') && ['nsaid', 'loop', 'thiazide', 'mra', 'acei', 'arb', 'arni'].some(has);
+    if ((dualRaas || lithiumMix) && level < 2) level = 2;
+    return { level, highs, mods, triple, dualRaas, lithiumMix, combo: triple || dualRaas || lithiumMix, classes };
+  }
+
+  // check: { weight, dizzy, lowFluids, lessUrine, vomDia, fever, confusion, bpLyingSys, bpLyingDia, bpStandSys, bpStandDia }
+  function assess(patient, tempToday) {
+    const heat = heatLevel(tempToday);
+    const mp = medProfile(patient.meds);
+    const reasons = [];
+    if (mp.triple) reasons.push({ k: 'triple' });
+    if (mp.dualRaas) reasons.push({ k: 'dualRaas' });
+    if (mp.lithiumMix) reasons.push({ k: 'lithiumMix' });
+    else if (mp.level >= 2) reasons.push({ k: 'highMeds', n: mp.highs });
+    else if (mp.level === 1) reasons.push({ k: 'someMeds' });
+    if (heat >= 1) reasons.push({ k: 'heat', t: tempToday, lvl: heat });
+
+    const c = patient.check;
+    if (!c) {
+      const highDay = mp.level >= 2 && heat >= 2;
+      return { status: 'pending', heat, mp, signs: 0, total: mp.level + heat, reasons, highDay };
+    }
+    if (c.confusion) {
+      reasons.unshift({ k: 'confusion' });
+      return { status: 'emergency', heat, mp, signs: 99, total: 99, reasons, highDay: false };
+    }
+    let signs = 0;
+    const delta = +(c.weight - patient.baseline).toFixed(1);
+    const lossPct = patient.baseline ? ((patient.baseline - c.weight) / patient.baseline) * 100 : 0;
+    if (lossPct >= 3) { signs += 3; reasons.push({ k: 'weight', d: delta, p: lossPct }); }
+    else if (lossPct >= 1.5) { signs += 2; reasons.push({ k: 'weight', d: delta, p: lossPct }); }
+    if (c.dizzy) { signs += 2; reasons.push({ k: 'dizzy' }); }
+    const hasBP = [c.bpLyingSys, c.bpLyingDia, c.bpStandSys, c.bpStandDia].every((v) => typeof v === 'number' && v > 0);
+    if (hasBP && (c.bpLyingSys - c.bpStandSys >= 20 || c.bpLyingDia - c.bpStandDia >= 10)) {
+      signs += 2; reasons.push({ k: 'orthostatic', s: c.bpLyingSys - c.bpStandSys, d: c.bpLyingDia - c.bpStandDia });
+    }
+    if (typeof c.pulse === 'number' && c.pulse >= 100) { signs += 2; reasons.push({ k: 'tachy', v: c.pulse }); }
+    if (c.vomDia) { signs += 3; reasons.push({ k: 'vomDia' }); }
+    if (c.lowFluids) { signs += 1; reasons.push({ k: 'lowFluids' }); }
+    if (c.lessUrine) { signs += 1; reasons.push({ k: 'lessUrine' }); }
+    if (c.fever) { signs += 1; reasons.push({ k: 'fever' }); }
+
+    const total = mp.level + heat + signs;
+    let status = 'green';
+    if ((signs >= 4 && mp.level >= 1) || (c.vomDia && mp.level >= 2) || total >= 9) status = 'red';
+    else if (total >= 5 || signs >= 2) status = 'amber';
+    // v1.2 safety floors, added after the blind pharmacist rating (Test 5). A floor can only raise the colour.
+    const RANK = { green: 0, amber: 1, red: 2, emergency: 3 }; const NAME = ['green', 'amber', 'red', 'emergency'];
+    let floor = 0;
+    const orth = reasons.some((r) => r.k === 'orthostatic'); const tachy = reasons.some((r) => r.k === 'tachy');
+    if (signs > 0) floor = Math.max(floor, 1);                                   // any abnormal home-check answer
+    if (mp.level >= 1 && tempToday >= 38) { floor = Math.max(floor, 1); if (heat === 0) reasons.push({ k: 'hotDay', t: tempToday }); }
+    if (c.vomDia || orth || tachy || c.fever) floor = Math.max(floor, 2);        // urgent-contact signs (Watson 2022)
+    if (lossPct >= 3) floor = Math.max(floor, 2);                                // weight 3% or more below usual
+    // v1.3: a dangerous mix is red on hot days (38 °C or more, or the city's hot level) or with any abnormal answer; otherwise amber
+    if (mp.combo && !patient.comboReviewed) {   // until the pharmacist has reviewed the mix once
+      const hot = OPT.comboRule === 'p90' ? heat >= 1 : OPT.comboRule === 'signs' ? false : (tempToday >= 38 || heat >= 1);
+      floor = Math.max(floor, OPT.comboHot ? ((hot || signs > 0) ? 2 : 1) : 2);
+      if (OPT.comboHot && RANK[status] < 2 && floor === 1) reasons.push({ k: 'comboReview' });
+    }
+    // v1.3: the city's very hot days (its top ~5%) put patients on high-risk medicines, or on any heat-sensitive medicine with an abnormal answer, on the pharmacist's list
+    if (OPT.heatRed && heat >= 2 && (mp.level >= 2 || (mp.level >= 1 && signs > 0))) { floor = Math.max(floor, 2); reasons.push({ k: 'veryHotDay', t: tempToday, lvl: heat }); }
+    if (c.vomDia && mp.classes.includes('lithium')) { floor = 3; reasons.unshift({ k: 'lithiumTox' }); }
+    if (RANK[status] < floor) status = NAME[floor];
+    return { status, heat, mp, signs, total, reasons, highDay: false };
+  }
+
+  // v1.3: look-ahead from the 3-day forecast. Opens the risk window the day before a very hot day.
+  function outlook(patient, temps) {
+    const mp = medProfile(patient.meds);
+    const lv = temps.map(heatLevel);
+    const ahead = lv.slice(1).findIndex((x) => x >= 2);
+    return { levels: lv, aheadDay: ahead < 0 ? -1 : ahead + 1, preCall: ahead >= 0 && mp.level >= 2, heads: ahead >= 0 && mp.level >= 1 };
+  }
+  root.DhillEngine = { CLASSES, MEDS, heatLevel, medProfile, assess, outlook, setCity, setOpt, CITY_T };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>(function (root) {
+  root.DhillPatients = [
+    { id: 'Y', nameAr: 'يوسف', nameEn: 'Yusuf', age: 76, baseline: 77.0, meds: ['furosemide', 'valsartan', 'amlodipine'],
+      check: { weight: 77.0, dizzy: false, lowFluids: false, lessUrine: false, vomDia: false, fever: false, confusion: false } },
+    { id: 'A', nameAr: 'سالم', nameEn: 'Salem', age: 74, baseline: 73.6, meds: ['furosemide', 'lisinopril', 'metformin', 'atorvastatin'],
+      check: { weight: 71.8, dizzy: true, lowFluids: true, lessUrine: false, vomDia: false, fever: false, confusion: false } },
+    { id: 'B', nameAr: 'فاطمة', nameEn: 'Fatimah', age: 81, baseline: 62.0, meds: ['empagliflozin', 'perindopril', 'ibuprofen', 'omeprazole'],
+      check: { weight: 61.4, dizzy: false, lowFluids: false, lessUrine: false, vomDia: true, fever: false, confusion: false } },
+    { id: 'C', nameAr: 'حسن', nameEn: 'Hassan', age: 69, baseline: 81.0, meds: ['metformin', 'gliclazide', 'amlodipine'],
+      check: { weight: 80.8, dizzy: false, lowFluids: true, lessUrine: false, vomDia: false, fever: false, confusion: false } },
+    { id: 'D', nameAr: 'نورة', nameEn: 'Noura', age: 77, baseline: 68.5, meds: ['hctz', 'losartan', 'diclofenac', 'levothyroxine'],
+      check: { weight: 68.4, dizzy: false, lowFluids: false, lessUrine: false, vomDia: false, fever: false, confusion: false } },
+    { id: 'E', nameAr: 'عبدالله', nameEn: 'Abdullah', age: 70, baseline: 85.2, meds: ['atorvastatin', 'omeprazole', 'aspirin81'],
+      check: { weight: 85.0, dizzy: false, lowFluids: false, lessUrine: false, vomDia: false, fever: false, confusion: false } },
+    { id: 'F', nameAr: 'مريم', nameEn: 'Maryam', age: 83, baseline: 58.0, meds: ['furosemide', 'spironolactone', 'bisoprolol'],
+      check: { weight: 57.6, dizzy: false, lowFluids: true, lessUrine: true, vomDia: false, fever: false, confusion: false } },
+    { id: 'G', nameAr: 'إبراهيم', nameEn: 'Ibrahim', age: 79, baseline: 70.0, meds: ['lithium', 'quetiapine', 'oxybutynin'],
+      check: { weight: 68.9, dizzy: false, lowFluids: true, lessUrine: false, vomDia: false, fever: false, confusion: true } },
+    { id: 'H', nameAr: 'خديجة', nameEn: 'Khadija', age: 72, baseline: 66.0, meds: ['lisinopril', 'dapagliflozin', 'metformin'], check: null },
+  ];
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script>
+(function () {
+  const E = window.DhillEngine;
+  const CLIM = {"makkah": [31, 32, 35, 38, 42, 44, 43, 42, 42, 40, 35, 32], "jeddah": [29, 29, 32, 34, 37, 38, 39, 38, 38, 36, 33, 31], "riyadh": [22, 24, 28, 34, 39, 43, 44, 44, 42, 36, 29, 23], "madinah": [25, 27, 31, 36, 40, 44, 44, 44, 43, 38, 31, 26]}; // mean daily maximum by month, 2016-2025, Meteostat stations
+  const CLIMNOW = (c) => CLIM[c][new Date().getMonth()];
+  const REPLAY = { makkah: { v: [43.1, 45.8, 46.0], en: '14–16 Sep 2025', ar: '14–16 سبتمبر 2025' }, jeddah: { v: [41.0, 42.0, 43.0], en: '3–5 Sep 2025', ar: '3–5 سبتمبر 2025' },
+    riyadh: { v: [44.5, 46.1, 46.3], en: '26–28 Aug 2024', ar: '26–28 أغسطس 2024' }, madinah: { v: [44.1, 46.6, 46.4], en: '11–13 Jul 2024', ar: '11–13 يوليو 2024' } }; // recorded daily maxima, Meteostat
+  const CITIES = {
+    makkah: { ar: 'مكة المكرمة', en: 'Makkah', fc: [CLIMNOW('makkah'), CLIMNOW('makkah'), CLIMNOW('makkah')], lat: 21.4225, lon: 39.8262 },
+    jeddah: { ar: 'جدة', en: 'Jeddah', fc: [CLIMNOW('jeddah'), CLIMNOW('jeddah'), CLIMNOW('jeddah')], lat: 21.5433, lon: 39.1728 },
+    riyadh: { ar: 'الرياض', en: 'Riyadh', fc: [CLIMNOW('riyadh'), CLIMNOW('riyadh'), CLIMNOW('riyadh')], lat: 24.7136, lon: 46.6753 },
+    madinah: { ar: 'المدينة المنورة', en: 'Madinah', fc: [CLIMNOW('madinah'), CLIMNOW('madinah'), CLIMNOW('madinah')], lat: 24.5247, lon: 39.5692 },
+  };
+  const T = {
+    ar: {
+      dir: 'rtl', brand: 'ظِلّ', tag: 'سلامة الدواء في الأيام الحارة', family: 'الأسرة', pharm: 'الصيدلي', langBtn: 'English',
+      demo: 'نسخة عرض · بيانات وهمية', patient: 'المريض', city: 'المدينة', todayMax: 'العظمى اليوم',
+      tToday: 'اليوم', tMeds: 'أدويتي', tCheck: 'الفحص اليومي', tHow: 'كيف يعمل', tBoard: 'قائمة الاتصال',
+      days: ['اليوم', 'غدًا', 'بعد غد'], heat: ['معتاد للمدينة', 'حار', 'حار جدًا', 'شديد الحرارة'], fc: 'توقعات الحرارة لثلاثة أيام',
+      st: { green: 'أخضر', amber: 'أصفر', red: 'أحمر', emergency: 'طارئ', pending: 'بانتظار الفحص' },
+      head: { green: 'يوم عادي', amber: 'انتبه اليوم', red: 'الصيدلي سيتصل بك اليوم', emergency: 'اطلب الإسعاف الآن', pending: 'أجرِ فحص اليوم' },
+      act: {
+        green: ['استمر على أدويتك المعتادة.', 'اشرب بانتظام ما لم يحدد طبيبك كمية السوائل.', 'ابقَ في مكان بارد وقت الظهيرة.'],
+        amber: ['أعد الفحص هذا المساء.', 'ابقَ في مكان بارد واشرب بانتظام ما لم يحدد طبيبك كمية السوائل.', 'اسأل الصيدلي قبل أي مسكّن مثل الإيبوبروفين.'],
+        red: ['الصيدلي على علم وسيتصل بك اليوم.', 'لا توقف أي دواء إلا بتوجيه من الصيدلي أو الطبيب.', 'إذا ساءت الأعراض فاطلب الرعاية الطبية.'],
+        emergency: ['التشوش أو الإغماء قد يدل على ضربة حر أو جفاف شديد.', 'اتصل بالإسعاف على 997 فورًا.', 'انقل المريض إلى مكان بارد حتى تصل المساعدة.'],
+        pendingHigh: ['أدوية حساسة للحر مع حرارة عالية: يوم عالي الخطورة.', 'أجرِ الفحص صباحًا ثم مساءً.'],
+        pending: ['الفحص يستغرق دقيقة واحدة.'],
+      },
+      notified: { amber: 'تنبيه للأسرة (محاكاة في هذه النسخة)', red: 'تنبيه للأسرة والصيدلي (محاكاة في هذه النسخة)', emergency: 'تنبيه للأسرة والصيدلي (محاكاة في هذه النسخة)' },
+      why: 'لماذا هذا اللون؟', doCheck: 'ابدأ فحص اليوم', redo: 'عدّل فحص اليوم',
+      reason: {
+        triple: () => 'مدرّ + مثبط ACE أو ARB + مسكّن NSAID معًا، وهي أخطر تركيبة على الكلى',
+        highMeds: (r) => r.n === 1 ? 'دواء عالي الخطورة في الحر' : r.n === 2 ? 'دواءان عاليا الخطورة في الحر' : r.n + ' أدوية عالية الخطورة في الحر',
+        someMeds: () => 'أدوية متوسطة الخطورة في الحر',
+        heat: (r, L) => 'العظمى <bdi dir="ltr">' + r.t + '°</bdi> (' + L.heat[r.lvl] + ')',
+        weight: (r) => 'الوزن أقل من المعتاد بـ ' + Math.abs(r.d).toFixed(1) + ' كغ (' + r.p.toFixed(1) + '%)',
+        dizzy: () => 'دوخة عند الوقوف', orthostatic: (r) => 'هبوط الضغط عند الوقوف (' + r.s + '/' + r.d + ')',
+        vomDia: () => 'قيء أو إسهال', lowFluids: () => 'شرب أقل من المعتاد', lessUrine: () => 'تبول أقل من المعتاد',
+        fever: () => 'حمّى', confusion: () => 'تشوش أو إغماء', tachy: (r) => 'نبض سريع (' + r.v + ' نبضة/دقيقة)', dualRaas: () => 'دواءان يثبّطان نظام الرينين-أنجيوتنسين معًا (حصار مزدوج)', lithiumMix: () => 'الليثيوم مع دواء يقلل التخلص منه (مسكّن NSAID أو مدرّ أو ACE/ARB)', lithiumTox: () => 'قيء أو إسهال مع الليثيوم: قد يكون تسممًا بالليثيوم', hotDay: (r) => 'يوم حار (' + r.t + '°) مع أدوية حساسة للحرارة', veryHotDay: (r, L) => 'يوم شديد الحرارة لهذه المدينة (' + r.t + '°، ضمن أحرّ 5% من أيامها) مع أدوية عالية الخطورة', comboReview: () => 'تركيبة أدوية خطرة لم يراجعها الصيدلي بعد',
+      },
+      profile: 'ملف الحرارة', prof: ['منخفض', 'متوسط', 'مرتفع', 'مرتفع جدًا'], risk: { H: 'خطورة عالية', M: 'خطورة متوسطة', L: 'خطورة منخفضة' },
+      add: 'إضافة دواء', scan: 'مسح تجريبي: اختر العلبة', addBtn: 'أضف', remove: 'حذف',
+      scanNote: 'في التطبيق الفعلي يُمسح باركود العلبة أو تُستورد الوصفة الإلكترونية.',
+      checkTitle: 'الفحص اليومي', checkSub: 'دقيقة واحدة كل صباح، ومرة ثانية مساءً في الأيام الحارة.',
+      baseline: 'الوزن المعتاد', wToday: 'وزن اليوم (كغ)',
+      q: { dizzy: 'دوخة عند الوقوف', lowFluids: 'شرب أقل من المعتاد', lessUrine: 'تبول أقل من المعتاد', vomDia: 'قيء أو إسهال', fever: 'حمّى', confusion: 'تشوش أو إغماء' },
+      bp: 'ضغط الدم (اختياري، بجهاز بلوتوث)', lying: 'مستلقيًا', standing: 'واقفًا بعد دقيقة', save: 'احفظ الفحص', saved: 'تم حفظ الفحص',
+      urineNote: 'لا نعتمد على لون البول، فهو غير موثوق لتقييم الجفاف عند كبار السن.',
+      boardTitle: 'قائمة الاتصال اليوم', boardSub: 'مركز رعاية أولية (وهمي) · مرتبة حسب الأولوية',
+      all: 'الكل', needCall: 'يحتاج اتصالًا', why2: 'الأسباب', review: 'مراجعة مقترحة · القرار للصيدلي',
+      revAmber: 'متابعة فقط؛ لا يُقترح تغيير دواء.', revPending: 'لم يُجرَ الفحص اليومي؛ اتصل للاطمئنان.', revGreen: 'لا إجراء.',
+      revEmerg: 'نُصحت الأسرة بالاتصال بالإسعاف 997؛ تابع الحالة.', revTriple: 'الأولوية: مراجعة هذه التركيبة، والنظر في إيقاف المسكّن NSAID.',
+      call: 'تم الاتصال', calledAt: 'اتُّصل الساعة ', open: 'افتح عرض الأسرة', yrs: ' سنة',
+      foot: 'نسخة عرض ببيانات وهمية لمسابقة ميداثون 2026. ليست للاستخدام السريري. الإصدار 1.3 (3 نوفمبر 2026).',
+      liveSrc: 'توقعات حية من Open-Meteo · تحديث ', liveFail: 'تعذّر جلب التوقعات الحية؛ المعروض متوسط العظمى المعتاد لهذا الشهر (2016–2025)', liveWait: 'جارٍ جلب التوقعات الحية…',
+      tryHot: 'حرّك المؤشر لتجربة يوم أشد حرارة', pulse: 'النبض (نبضة/دقيقة)',
+      ahead: (d, t, pre) => 'تنبيه مسبق: ' + d + ' يوم شديد الحرارة (<bdi dir="ltr">' + t + '°</bdi>). ' + (pre ? 'سيراجع الصيدلي أدويتك قبله.' : 'أجرِ الفحص صباحًا ومساءً وابقَ في مكان بارد.'),
+      replayOn: 'أعِد موجة حر حقيقية مسجّلة', replayOff: 'العودة إلى التوقعات الحية', replaySrc: (c, d) => 'إعادة لدرجات عظمى مسجّلة في محطة ' + c + '، ' + d,
+      revPre: (d) => 'مراجعة قبل الحر (' + d + ' يوم شديد الحرارة): راجع خطة أيام المرض مع الأسرة.',
+      preTag: 'مراجعة قبل الحر', reviewed: 'رُوجعت التركيبة', comboTag: 'تحتاج مراجعة التركيبة مرة واحدة',
+    },
+    en: {
+      dir: 'ltr', brand: 'Dhill', tag: 'Medication safety on hot days', family: 'Family', pharm: 'Pharmacist', langBtn: 'العربية',
+      demo: 'Demo · fictional data', patient: 'Patient', city: 'City', todayMax: 'High today',
+      tToday: 'Today', tMeds: 'Medicines', tCheck: 'Daily check', tHow: 'How it works', tBoard: 'Call list',
+      days: ['Today', 'Tomorrow', 'Day after'], heat: ['Usual for city', 'Hot', 'Very hot', 'Extreme'], fc: '3-day heat forecast',
+      st: { green: 'Green', amber: 'Amber', red: 'Red', emergency: 'Emergency', pending: 'Awaiting check' },
+      head: { green: 'Routine day', amber: 'Take care today', red: 'Your pharmacist will call today', emergency: 'Call an ambulance now', pending: "Do today's check" },
+      act: {
+        green: ['Keep taking your usual medicines.', 'Drink regularly unless your doctor limits your fluids.', 'Stay somewhere cool at midday.'],
+        amber: ['Check again this evening.', 'Stay cool and drink regularly unless your doctor limits your fluids.', 'Ask the pharmacist before any pain-killer such as ibuprofen.'],
+        red: ['Your pharmacist is on it and will call today.', 'Do not stop any medicine unless your pharmacist or doctor tells you to.', 'If symptoms get worse, seek medical care.'],
+        emergency: ['Confusion or fainting can mean heat stroke or severe dehydration.', 'Call an ambulance on 997 now.', 'Move the person somewhere cool until help arrives.'],
+        pendingHigh: ['Heat-sensitive medicines plus high heat: a high-risk day.', 'Do the check in the morning and again in the evening.'],
+        pending: ['The check takes one minute.'],
+      },
+      notified: { amber: 'Family alert (simulated in this demo)', red: 'Family and pharmacist alert (simulated in this demo)', emergency: 'Family and pharmacist alert (simulated in this demo)' },
+      why: 'Why this colour?', doCheck: "Start today's check", redo: "Edit today's check",
+      reason: {
+        triple: () => 'Diuretic + ACE inhibitor or ARB + NSAID together, the riskiest mix for the kidneys',
+        highMeds: (r) => r.n === 1 ? 'One high-risk medicine in the heat' : r.n + ' high-risk medicines in the heat',
+        someMeds: () => 'Medicines with moderate heat risk',
+        heat: (r, L) => 'High of ' + r.t + '° (' + L.heat[r.lvl] + ')',
+        weight: (r) => 'Weight ' + Math.abs(r.d).toFixed(1) + ' kg below usual (' + r.p.toFixed(1) + '%)',
+        dizzy: () => 'Dizzy on standing', orthostatic: (r) => 'Blood pressure drops on standing (' + r.s + '/' + r.d + ')',
+        vomDia: () => 'Vomiting or diarrhoea', lowFluids: () => 'Drinking less than usual', lessUrine: () => 'Passing less urine',
+        fever: () => 'Fever', confusion: () => 'Confusion or fainting', tachy: (r) => 'Fast pulse (' + r.v + '/min)', dualRaas: () => 'Two renin–angiotensin blockers together (dual blockade)', lithiumMix: () => 'Lithium with a medicine that slows its clearance (NSAID, diuretic or ACE/ARB)', lithiumTox: () => 'Vomiting or diarrhoea on lithium: possible lithium toxicity', hotDay: (r) => 'Hot day (' + r.t + '°) with heat-sensitive medicines', veryHotDay: (r, L) => 'Very hot day for this city (' + r.t + '°, among its hottest 5% of days) with high-risk medicines', comboReview: () => 'Dangerous medicine mix not yet reviewed by the pharmacist',
+      },
+      profile: 'Heat profile', prof: ['Low', 'Moderate', 'High', 'Very high'], risk: { H: 'High risk', M: 'Moderate risk', L: 'Low risk' },
+      add: 'Add a medicine', scan: 'Demo scan: pick the box', addBtn: 'Add', remove: 'Remove',
+      scanNote: 'In the real app the box barcode is scanned or the e-prescription is imported.',
+      checkTitle: 'Daily check', checkSub: 'One minute each morning, and again in the evening on hot days.',
+      baseline: 'Usual weight', wToday: "Today's weight (kg)",
+      q: { dizzy: 'Dizzy on standing', lowFluids: 'Drinking less than usual', lessUrine: 'Passing less urine', vomDia: 'Vomiting or diarrhoea', fever: 'Fever', confusion: 'Confusion or fainting' },
+      bp: 'Blood pressure (optional, Bluetooth cuff)', lying: 'Lying down', standing: 'Standing, after 1 min', save: 'Save check', saved: 'Check saved',
+      urineNote: 'Urine colour is not used: it is unreliable for judging hydration in older adults.',
+      boardTitle: "Today's call list", boardSub: 'Primary-care centre (fictional) · sorted by priority',
+      all: 'All', needCall: 'Needs a call', why2: 'Reasons', review: 'Suggested review · pharmacist decides',
+      revAmber: 'Monitor only; no medicine change suggested.', revPending: 'Daily check not done; call to check in.', revGreen: 'No action.',
+      revEmerg: 'Family advised to call 997; follow up.', revTriple: 'Priority: review this combination; consider stopping the NSAID.',
+      call: 'Mark called', calledAt: 'Called at ', open: 'Open family view', yrs: ' yrs',
+      foot: 'Demo with fictional data for MEDATHON 2026. Not for clinical use. Version 1.3 (3 Nov 2026).',
+      liveSrc: 'Live forecast from Open-Meteo · updated ', liveFail: 'Live forecast unavailable; showing this month’s typical high (2016–2025)', liveWait: 'Loading live forecast…',
+      tryHot: 'move the slider to try a hotter day', pulse: 'Pulse (beats/min)',
+      ahead: (d, t, pre) => 'Heads-up: ' + d.toLowerCase() + ' is a very hot day (<bdi dir="ltr">' + t + '°</bdi>). ' + (pre ? 'Your pharmacist will review your medicines before it.' : 'Do the check morning and evening and stay cool.'),
+      replayOn: 'Replay a real recorded heat spell', replayOff: 'Back to the live forecast', replaySrc: (c, d) => 'Replay of recorded highs, ' + c + ' station, ' + d,
+      revPre: (d) => 'Pre-heat review (' + d.toLowerCase() + ' is a very hot day): go over the sick-day plan with the family.',
+      preTag: 'Pre-heat review', reviewed: 'Mix reviewed', comboTag: 'Needs a one-off review of the mix',
+    },
+  };
+  const ORDER = { emergency: 0, red: 1, amber: 2, pending: 3, green: 4 };
+  const state = {
+    lang: 'ar', role: 'family', tab: 'today', pid: 'Y', city: 'makkah', temp: CLIMNOW('makkah'), filter: 'all',
+    called: {}, addOpen: false, live: {}, liveAt: {}, liveFail: {}, userTemp: false, replay: false,
+    patients: JSON.parse(JSON.stringify(window.DhillPatients)),
+  };
+  try { const l = localStorage.getItem('dhill-lang'); if (l === 'en' || l === 'ar') state.lang = l; } catch (e) {}
+
+  const $ = (id) => document.getElementById(id);
+  const L = () => T[state.lang];
+  const P = () => state.patients.find((p) => p.id === state.pid);
+  const pname = (p) => (state.lang === 'ar' ? p.nameAr : p.nameEn);
+  const mname = (m) => E.MEDS[m][state.lang];
+  const cinfo = (m) => E.CLASSES[E.MEDS[m].cls];
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const reasonText = (r) => L().reason[r.k](r, L());
+  const baseFc = () => state.replay ? REPLAY[state.city].v : (state.live[state.city] || CITIES[state.city].fc);
+  const fcTemps = () => { const f = baseFc().slice(); f[0] = state.temp; return f; };
+  function fetchLive(city) {
+    const c = CITIES[city];
+    try { const k = JSON.parse(localStorage.getItem('dhill-fc-' + city) || 'null'); if (k && Date.now() - k.t < 3600e3) { state.live[city] = k.v; state.liveAt[city] = k.at; if (city === state.city && !state.userTemp && !state.replay) state.temp = k.v[0]; if (city === state.city) render(); return; } } catch (e) {}
+    const url = 'https://api.open-meteo.com/v1/forecast?latitude=' + c.lat + '&longitude=' + c.lon + '&daily=temperature_2m_max&forecast_days=3&timezone=Asia%2FRiyadh';
+    fetch(url).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }).then((d) => {
+      const v = d.daily.temperature_2m_max.slice(0, 3).map((x) => Math.round(x));
+      if (v.length < 3 || v.some((x) => !isFinite(x))) throw new Error('bad data');
+      state.live[city] = v; state.liveAt[city] = hhmm(); delete state.liveFail[city];
+      try { localStorage.setItem('dhill-fc-' + city, JSON.stringify({ t: Date.now(), v: v, at: state.liveAt[city] })); } catch (e) {}
+      if (city === state.city && !state.userTemp && !state.replay) state.temp = v[0];
+      if (city === state.city) render();
+    }).catch(() => { state.liveFail[city] = true; if (city === state.city) render(); });
+  }
+
+  const brandSvg = '<svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="22" r="7" fill="var(--sun)"/><path d="M3 15 Q17 1 31 15" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/><path d="M5 29 H29" stroke="var(--line)" stroke-width="2" stroke-linecap="round"/></svg>';
+
+  function renderTop() {
+    const l = L();
+    $('top').innerHTML =
+      '<div class="brand">' + brandSvg + '<div><div class="brand-name">' + l.brand + '</div><div class="brand-tag">' + l.tag + '</div></div></div>' +
+      '<div class="seg" role="group" aria-label="Role"><button data-role="family" aria-pressed="' + (state.role === 'family') + '">' + l.family + '</button>' +
+      '<button data-role="pharm" aria-pressed="' + (state.role === 'pharm') + '">' + l.pharm + '</button></div>' +
+      '<button class="lang" id="langBtn" lang="' + (state.lang === 'ar' ? 'en' : 'ar') + '">' + l.langBtn + '</button>';
+  }
+
+  function renderDemo() {
+    const l = L();
+    let html = '<span class="demo-label">' + l.demo + '</span>';
+    if (state.role === 'family') {
+      html += '<div class="field"><span>' + l.patient + '</span><div class="chips">' + state.patients.map((p) => {
+        const a = E.assess(p, state.temp);
+        return '<button class="chip st-' + a.status + '" data-pid="' + p.id + '" aria-pressed="' + (p.id === state.pid) + '"><span class="dot" style="background:var(--st)"></span>' + esc(pname(p)) + '</button>';
+      }).join('') + '</div></div>';
+    }
+    html += '<label class="field" for="citySel"><span>' + l.city + '</span><select id="citySel">' + Object.keys(CITIES).map((k) =>
+      '<option value="' + k + '"' + (k === state.city ? ' selected' : '') + '>' + CITIES[k][state.lang] + '</option>').join('') + '</select></label>';
+    html += '<label class="field" for="tempRange"><span>' + l.todayMax + '</span><input type="range" id="tempRange" min="15" max="50" step="1" value="' + state.temp + '"><span class="temp-out num" id="tempOut" dir="ltr">' + state.temp + '°</span></label>';
+    html += '<button class="btn ghost replay" id="replayBtn" aria-pressed="' + state.replay + '">' + (state.replay ? l.replayOff : l.replayOn) + '</button>';
+    $('demo').innerHTML = html;
+  }
+
+  function renderTabs() {
+    const l = L();
+    const tabs = state.role === 'family' ? [['today', l.tToday], ['meds', l.tMeds], ['check', l.tCheck], ['how', l.tHow]] : [['board', l.tBoard], ['how', l.tHow]];
+    if (!tabs.some((t) => t[0] === state.tab)) state.tab = tabs[0][0];
+    $('tabs').innerHTML = tabs.map((t) => '<button role="tab" data-tab="' + t[0] + '" aria-selected="' + (state.tab === t[0]) + '">' + t[1] + '</button>').join('');
+  }
+
+  function forecastHtml() {
+    const l = L();
+    const src = state.replay ? l.replaySrc(CITIES[state.city][state.lang], REPLAY[state.city][state.lang]) : state.live[state.city] ? l.liveSrc + state.liveAt[state.city] : (state.liveFail[state.city] ? l.liveFail : l.liveWait);
+    return '<div class="card stack"><h3>' + l.fc + ' · ' + CITIES[state.city][state.lang] + '</h3><p class="small muted live-src">' + src + ' · ' + l.tryHot + '</p><div class="fc">' + fcTemps().map((t, i) => {
+      const lv = E.heatLevel(t);
+      return '<div class="fc-day lv' + lv + (i === 0 ? ' today' : '') + '"><div class="small muted">' + l.days[i] + '</div><div class="fc-temp num"><bdi dir="ltr">' + t + '°</bdi></div><span class="pill">' + l.heat[lv] + '</span></div>';
+    }).join('') + '</div></div>';
+  }
+
+  function viewToday() {
+    const l = L(); const p = P(); const a = E.assess(p, state.temp);
+    const f = fcTemps(); const o = E.outlook(p, f);
+    const ahead = o.heads ? '<div class="notice ahead">' + l.ahead(l.days[o.aheadDay], f[o.aheadDay], o.preCall) + '</div>' : '';
+    const acts = a.status === 'pending' ? (a.highDay ? l.act.pendingHigh : l.act.pending) : l.act[a.status];
+    const notified = l.notified[a.status] ? '<div class="notice">' + l.notified[a.status] + '</div>' : '';
+    const statusCard = '<div class="card stack st-' + a.status + '"><div class="status"><div class="ring"><b>' + l.st[a.status] + '</b></div>' +
+      '<div class="stack" style="gap:6px"><div class="who">' + esc(pname(p)) + ' · ' + p.age + l.yrs + '</div><div class="headline">' + l.head[a.status] + '</div>' +
+      (a.highDay ? '<span class="pill st-amber">' + l.act.pendingHigh[0] + '</span>' : '') + '</div></div>' +
+      '<ul class="actions">' + acts.map((x) => '<li>' + x + '</li>').join('') + '</ul>' + notified + ahead +
+      '<div class="row"><button class="btn" data-go="check">' + (p.check ? l.redo : l.doCheck) + '</button></div></div>';
+    const why = '<div class="card stack"><h3>' + l.why + '</h3><ul class="reasons">' + (a.reasons.length ? a.reasons.map((r) =>
+      '<li><span class="dot"></span><span>' + reasonText(r) + '</span></li>').join('') : '<li class="muted">—</li>') + '</ul></div>';
+    return '<div class="grid2"><div class="stack">' + statusCard + '</div><div class="stack">' + forecastHtml() + why + '</div></div>';
+  }
+
+  function viewMeds() {
+    const l = L(); const p = P(); const mp = E.medProfile(p.meds);
+    const sorted = p.meds.slice().sort((x, y) => 'HML'.indexOf(cinfo(x).risk) - 'HML'.indexOf(cinfo(y).risk));
+    const lvClass = ['risk-L', 'risk-M', 'risk-H', 'risk-H'][mp.level];
+    let html = '<div class="grid2"><div class="card stack"><div class="row" style="justify-content:space-between"><h2>' + l.tMeds + '</h2>' +
+      '<span class="pill ' + lvClass + '">' + l.profile + ': ' + l.prof[mp.level] + '</span></div><div>';
+    html += sorted.map((m) => { const c = cinfo(m); return '<div class="med"><div class="med-main"><div class="med-name">' + mname(m) + '</div>' +
+      '<div class="small muted">' + (state.lang === 'ar' ? c.ar : c.en) + '</div><div class="small" style="margin-top:4px">' + (state.lang === 'ar' ? c.whyAr : c.whyEn) + '</div></div>' +
+      '<span class="pill risk-' + c.risk + '">' + l.risk[c.risk] + '</span><button class="x" data-rm="' + m + '" aria-label="' + l.remove + ' ' + mname(m) + '">×</button></div>'; }).join('');
+    html += '</div></div><div class="card stack"><h3>' + l.add + '</h3>';
+    const avail = Object.keys(E.MEDS).filter((m) => !p.meds.includes(m));
+    html += '<label class="field" for="addSel" style="flex-wrap:wrap"><span>' + l.scan + '</span><select id="addSel">' + avail.map((m) =>
+      '<option value="' + m + '">' + mname(m) + '</option>').join('') + '</select></label><div class="row"><button class="btn" id="addBtn">' + l.addBtn + '</button></div>' +
+      '<p class="small muted">' + l.scanNote + '</p></div></div>';
+    return html;
+  }
+
+  function viewCheck() {
+    const l = L(); const p = P(); const c = p.check || { weight: p.baseline };
+    const tog = (k) => '<label class="tog' + (k === 'confusion' ? ' warn-tog' : '') + '"><input type="checkbox" id="q-' + k + '"' + (c[k] ? ' checked' : '') + '>' + l.q[k] + '</label>';
+    const AL = { bpLS: [l.lying, 'SYS'], bpLD: [l.lying, 'DIA'], bpSS: [l.standing, 'SYS'], bpSD: [l.standing, 'DIA'], pulse: [l.pulse, ''] };
+    const num = (id, v) => '<input type="number" inputmode="numeric" id="' + id + '" min="20" max="250" value="' + (v || '') + '" aria-label="' + (AL[id] ? (AL[id][0] + (AL[id][1] ? ' · ' + AL[id][1] : '')) : id) + '">';
+    return '<div class="card"><form class="check" id="checkForm"><div class="stack" style="gap:4px"><h2>' + l.checkTitle + '</h2><p class="muted">' + l.checkSub + '</p></div>' +
+      '<div class="row"><span class="field">' + l.baseline + ': <b class="num" style="color:var(--ink)">' + p.baseline.toFixed(1) + '</b></span>' +
+      '<label class="field" for="wToday">' + l.wToday + '<input type="number" id="wToday" step="0.1" min="20" max="250" value="' + c.weight + '" class="num"></label></div>' +
+      '<div class="toggles">' + ['dizzy', 'lowFluids', 'lessUrine', 'vomDia', 'fever', 'confusion'].map(tog).join('') + '</div>' +
+      '<fieldset><legend>' + l.bp + '</legend><div class="bp"><div class="field">' + l.lying + ' ' + num('bpLS', c.bpLyingSys) + '/' + num('bpLD', c.bpLyingDia) + '</div>' +
+      '<div class="field">' + l.standing + ' ' + num('bpSS', c.bpStandSys) + '/' + num('bpSD', c.bpStandDia) + '</div>' +
+      '<div class="field"><label for="pulse">' + l.pulse + '</label> ' + num('pulse', c.pulse) + '</div></div></fieldset>' +
+      '<p class="small muted">' + l.urineNote + '</p><div class="row"><button class="btn" type="submit">' + l.save + '</button></div></form></div>';
+  }
+
+  function reviewLines(p, a) {
+    const l = L(); const lines = [];
+    if (a.status === 'emergency') lines.push(l.revEmerg);
+    if (a.status === 'red' || a.status === 'emergency') {
+      if (a.mp.triple) lines.push(l.revTriple);
+      p.meds.forEach((m) => { const c = cinfo(m); const txt = state.lang === 'ar' ? c.revAr : c.revEn; if (txt && c.risk !== 'L') lines.push('<b>' + mname(m) + ':</b> ' + txt); });
+    } else if (E.outlook(p, fcTemps()).preCall) {
+      const o = E.outlook(p, fcTemps()); lines.push(l.revPre(l.days[o.aheadDay]));
+      p.meds.forEach((m) => { const c = cinfo(m); const txt = state.lang === 'ar' ? c.revAr : c.revEn; if (txt && c.risk === 'H') lines.push('<b>' + mname(m) + ':</b> ' + txt); });
+    } else if (a.status === 'amber') { lines.push(l.revAmber); if (a.mp.triple) lines.push(l.revTriple); }
+    else if (a.status === 'pending') lines.push(l.revPending);
+    else lines.push(l.revGreen);
+    return lines;
+  }
+
+  function viewBoard() {
+    const l = L();
+    const rows = state.patients.map((p) => ({ p, a: E.assess(p, state.temp), o: E.outlook(p, fcTemps()) })).sort((x, y) => ORDER[x.a.status] - ORDER[y.a.status] || (y.o.preCall - x.o.preCall) || y.a.total - x.a.total);
+    const cnt = {}; rows.forEach((r) => { cnt[r.a.status] = (cnt[r.a.status] || 0) + 1; });
+    const shown = state.filter === 'need' ? rows.filter((r) => ORDER[r.a.status] <= 1 || r.a.status === 'pending' || r.o.preCall) : rows;
+    let html = '<div class="stack"><div class="row" style="justify-content:space-between;align-items:flex-end"><div><h2>' + l.boardTitle + '</h2><p class="muted small">' + l.boardSub + ' · ' + CITIES[state.city][state.lang] + ' <bdi dir="ltr">' + state.temp + '°</bdi></p></div>' +
+      '<div class="chips"><button class="chip" data-filter="all" aria-pressed="' + (state.filter === 'all') + '">' + l.all + '</button><button class="chip" data-filter="need" aria-pressed="' + (state.filter === 'need') + '">' + l.needCall + '</button></div></div>';
+    html += '<div class="counts">' + ['emergency', 'red', 'amber', 'pending', 'green'].map((s) => '<div class="count st-' + s + '"><b class="num">' + (cnt[s] || 0) + '</b><span class="small">' + l.st[s] + '</span></div>').join('') + '</div>';
+    html += '<div class="board-list">' + shown.map(({ p, a }) => {
+      const prio = ORDER[a.status] <= 1;
+      const called = state.called[p.id];
+      const o = E.outlook(p, fcTemps());
+      const tags = (o.preCall && ORDER[a.status] > 1 ? '<span class="pill st-amber">' + l.preTag + ' · ' + l.days[o.aheadDay] + '</span>' : '') +
+        (a.mp.combo ? '<span class="pill ' + (p.comboReviewed ? 'st-green' : 'st-red') + '">' + (p.comboReviewed ? l.reviewed : l.comboTag) + '</span>' : '');
+      return '<article class="card pt st-' + a.status + (prio ? ' prio' : '') + '"><div class="pt-head"><span class="pill">' + l.st[a.status] + '</span><span class="pt-name">' + esc(pname(p)) + '</span><span class="muted small">' + p.age + l.yrs + ' · ' + p.meds.map(mname).join(state.lang === 'ar' ? '، ' : ', ') + '</span>' + tags + '</div>' +
+        '<div class="pt-cols"><div><div class="small muted">' + l.why2 + '</div><ul class="reasons small">' + (a.reasons.length ? a.reasons.map((r) => '<li><span class="dot"></span><span>' + reasonText(r) + '</span></li>').join('') : '<li class="muted">—</li>') + '</ul></div>' +
+        '<div><div class="small muted">' + l.review + '</div><ul class="rev small">' + reviewLines(p, a).map((x) => '<li>' + x + '</li>').join('') + '</ul></div></div>' +
+        '<div class="row">' + (a.status !== 'green' ? (called ? '<span class="called small">' + l.calledAt + called + '</span>' : '<button class="btn" data-call="' + p.id + '">' + l.call + '</button>') : '') +
+        '<button class="btn ghost" data-open="' + p.id + '">' + l.open + '</button></div></article>';
+    }).join('') + '</div></div>';
+    return html;
+  }
+
+  function viewHow() {
+    const ar = state.lang === 'ar';
+    const rows = ar ? [
+      ['وزن أقل من المعتاد بـ 1.5–3%', '2'], ['وزن أقل بـ 3% أو أكثر', '3'], ['دوخة عند الوقوف', '2'], ['هبوط الضغط عند الوقوف (≥20/10)', '2'],
+      ['قيء أو إسهال', '3'], ['شرب أقل · تبول أقل · حمّى', '1 لكل منها'], ['نبض ≥ 100 وقت الراحة (من جهاز الضغط)', '2'], ['تشوش أو إغماء', 'طارئ مباشرةً']] : [
+      ['Weight 1.5–3% below usual', '2'], ['Weight 3% or more below usual', '3'], ['Dizzy on standing', '2'], ['BP drop on standing (≥20/10)', '2'],
+      ['Vomiting or diarrhoea', '3'], ['Drinking less · less urine · fever', '1 each'], ['Resting pulse ≥ 100 (from the BP cuff)', '2'], ['Confusion or fainting', 'Emergency at once']];
+    const t = (a, b) => ar ? a : b;
+    return '<div class="how">' +
+      '<div class="card stack"><h2>' + t('ثلاثة مدخلات، قرار واحد', 'Three inputs, one decision') + '</h2>' +
+      '<div class="tbl"><table><thead><tr><th>' + t('المدخل', 'Input') + '</th><th>' + t('النقاط', 'Points') + '</th></tr></thead><tbody>' +
+      '<tr><td>' + t('الأدوية: لا شيء · متوسطة · دواءان عاليا الخطورة أو الليثيوم · تركيبة مدرّ + ACE/ARB + NSAID', 'Medicines: none · moderate · two high-risk or lithium · diuretic + ACE/ARB + NSAID') + '</td><td class="num">0 · 1 · 2 · 3</td></tr>' +
+      '<tr><td>' + t('الحرارة العظمى مقارنةً بصيف المدينة نفسها (' + CITIES[state.city].ar + ': ' + E.CITY_T[state.city].join('° · ') + '°)', 'Forecast high against the city\'s own summer (' + CITIES[state.city].en + ': ' + E.CITY_T[state.city].join('° · ') + '°)') + '</td><td class="num">0 · 1 · 2 · 3</td></tr>' +
+      '<tr><td>' + t('علامات الفحص اليومي (الجدول التالي)', 'Daily-check signs (next table)') + '</td><td class="num">0+</td></tr></tbody></table></div></div>' +
+      '<div class="card stack"><h3>' + t('نقاط الفحص اليومي', 'Daily-check points') + '</h3><div class="tbl"><table><tbody>' + rows.map((r) => '<tr><td>' + r[0] + '</td><td class="num">' + r[1] + '</td></tr>').join('') + '</tbody></table></div></div>' +
+      '<div class="card stack"><h3>' + t('قواعد اللون', 'Colour rules') + '</h3><ul class="actions">' +
+      '<li class="st-red"><b style="color:var(--st-ink, var(--st))">' + t('أحمر', 'Red') + '</b>: ' + t('يوم شديد الحرارة للمدينة (أحرّ 5% من أيامها) مع دواءين عاليي الخطورة، أو مع أي دواء حساس وأي إجابة غير طبيعية؛ أو قيء أو إسهال، أو هبوط الضغط عند الوقوف، أو نبض ≥ 100، أو حمّى، أو وزن أقل بـ 3% فأكثر؛ أو علامات ≥ 4 نقاط مع دواء حساس للحرارة؛ أو تركيبة أدوية خطرة في يوم 38° فأكثر أو مع أي إجابة غير طبيعية، حتى يراجعها الصيدلي؛ أو المجموع ≥ 9. يتصل الصيدلي في اليوم نفسه.', 'a very hot day for the city (its hottest 5%) with two high-risk medicines, or with any heat-sensitive medicine and any abnormal answer; vomiting or diarrhoea, BP drop on standing, pulse ≥ 100, fever, or weight 3% or more below usual; 4 or more sign points with a heat-sensitive medicine; a dangerous mix on a day of 38° or more or with any abnormal answer, until the pharmacist has reviewed it; or total ≥ 9. The pharmacist calls the same day.') + '</li>' +
+      '<li class="st-amber"><b style="color:var(--st-ink, var(--st))">' + t('أصفر', 'Amber') + '</b>: ' + t('أي إجابة غير طبيعية في الفحص اليومي، أو أدوية حساسة للحرارة في يوم 38° فأكثر (روتين الصيف)، أو تركيبة خطرة لم تُراجَع بعد، أو المجموع ≥ 5. تذكير للأسرة وفحص ثانٍ مساءً، دون اتصال من الصيدلي.', 'any abnormal answer in the daily check, heat-sensitive medicines on a day of 38° or more (summer routine), a dangerous mix not yet reviewed, or total ≥ 5. Family reminder and a second check in the evening; no pharmacist call.') + '</li>' +
+      '<li class="st-emergency"><b style="color:var(--st-ink, var(--st))">' + t('طارئ', 'Emergency') + '</b>: ' + t('تشوش أو إغماء، أو قيء/إسهال مع الليثيوم. الاتصال بالإسعاف 997.', 'confusion or fainting, or vomiting/diarrhoea on lithium. Call 997.') + '</li>' +
+      '<li class="st-green"><b style="color:var(--st-ink, var(--st))">' + t('أخضر', 'Green') + '</b>: ' + t('غير ذلك. نصائح الحر العامة.', 'otherwise. General heat advice.') + '</li></ul>' +
+      '<p class="small muted">' + t('حدود الحرارة هي المئين 90 و95 و97.5 لدرجة الحرارة العظمى في كل مدينة (محطات الأرصاد 2021–2025)، وتُعاد معايرتها كل سنة. باقي العتبات ستُراجع مع الصيادلة قبل أي تجربة.', 'Heat cut-offs are each city\'s 90th, 95th and 97.5th percentile of daily maximum temperature (station data 2021–2025), recalibrated every year. Other thresholds will be reviewed with pharmacists before any pilot.') + '</p></div>' +
+      '<div class="card stack"><h3>' + t('مبادئ السلامة', 'Safety principles') + '</h3><ul class="actions">' +
+      '<li>' + t('التطبيق لا يوقف أي دواء بنفسه، والقرار للصيدلي أو الطبيب.', 'The app never stops a medicine; the pharmacist or doctor decides.') + '</li>' +
+      '<li>' + t('الاقتراحات للصيدلي مأخوذة من إرشادات «أيام المرض» المنشورة.', 'Suggestions to the pharmacist follow published sick-day guidance.') + '</li>' +
+      '<li>' + t('لا نعتمد على لون البول لأنه غير موثوق عند كبار السن (Hooper 2016؛ ESPEN 2019).', 'Urine colour is not used; it is unreliable in older adults (Hooper 2016; ESPEN 2019).') + '</li>' +
+      '<li>' + t('التشوش أو الإغماء يتجاوز كل النقاط ويوجّه إلى الإسعاف 997.', 'Confusion or fainting overrides all scores and points to the 997 ambulance.') + '</li>' +
+      '<li>' + t('توقعات الأيام الثلاثة تفتح نافذة الخطر قبل اليوم شديد الحرارة: تنبيه مسبق للأسرة، ومراجعة من الصيدلي قبله لمن يتناول أدوية عالية الخطورة.', 'The 3-day forecast opens the risk window before a very hot day: a heads-up to the family, and a pharmacist review before it for patients on high-risk medicines.') + '</li></ul></div>' +
+      '</div>';
+  }
+
+  function render() {
+    const l = L();
+    document.documentElement.lang = state.lang; document.documentElement.dir = l.dir;
+    E.setCity(state.city);
+    renderTop(); renderDemo(); renderTabs();
+    const v = { today: viewToday, meds: viewMeds, check: viewCheck, how: viewHow, board: viewBoard }[state.tab];
+    $('view').innerHTML = v();
+    $('foot').textContent = l.foot;
+  }
+
+  let toastTimer = null;
+  function toast(msg) { const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 2200); }
+  const hhmm = () => { const d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
+
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.id === 'langBtn') { state.lang = state.lang === 'ar' ? 'en' : 'ar'; try { localStorage.setItem('dhill-lang', state.lang); } catch (er) {} render(); return; }
+    if (b.dataset.role) { state.role = b.dataset.role; state.tab = state.role === 'family' ? 'today' : 'board'; render(); return; }
+    if (b.dataset.tab) { state.tab = b.dataset.tab; render(); return; }
+    if (b.dataset.pid) { state.pid = b.dataset.pid; state.addOpen = false; render(); return; }
+    if (b.dataset.go) { state.tab = b.dataset.go; render(); return; }
+    if (b.dataset.rm) { const p = P(); if (p.meds.length > 1) { p.meds = p.meds.filter((m) => m !== b.dataset.rm); render(); } return; }
+    if (b.id === 'replayBtn') { state.replay = !state.replay; state.userTemp = false; state.temp = baseFc()[0]; render(); return; }
+    if (b.id === 'addBtn') { const s = $('addSel'); if (s && s.value) { P().meds.push(s.value); render(); } return; }
+    if (b.dataset.filter) { state.filter = b.dataset.filter; render(); return; }
+    if (b.dataset.call) { state.called[b.dataset.call] = hhmm(); const cp = state.patients.find((x) => x.id === b.dataset.call); if (cp && E.medProfile(cp.meds).combo) cp.comboReviewed = true; render(); return; }
+    if (b.dataset.open) { state.role = 'family'; state.pid = b.dataset.open; state.tab = 'today'; render(); window.scrollTo(0, 0); return; }
+  });
+  document.addEventListener('change', (e) => {
+    if (e.target.id === 'citySel') { state.city = e.target.value; state.userTemp = false; E.setCity(state.city); state.temp = baseFc()[0]; render(); if (!state.live[state.city]) fetchLive(state.city); }
+  });
+  document.addEventListener('input', (e) => {
+    if (e.target.id === 'tempRange') {
+      state.temp = +e.target.value; state.userTemp = true; $('tempOut').textContent = state.temp + '°';
+      const v = { today: viewToday, meds: viewMeds, check: null, how: null, board: viewBoard }[state.tab];
+      if (v) $('view').innerHTML = v();
+      document.querySelectorAll('#demo [data-pid]').forEach((btn) => {
+        const p = state.patients.find((x) => x.id === btn.dataset.pid); btn.className = 'chip st-' + E.assess(p, state.temp).status;
+      });
+    }
+  });
+  document.addEventListener('submit', (e) => {
+    if (e.target.id !== 'checkForm') return;
+    e.preventDefault();
+    const n = (id) => { const v = parseFloat($(id).value); return isFinite(v) ? v : undefined; };
+    const q = (k) => $('q-' + k).checked;
+    const p = P();
+    p.check = { weight: n('wToday') || p.baseline, dizzy: q('dizzy'), lowFluids: q('lowFluids'), lessUrine: q('lessUrine'), vomDia: q('vomDia'), fever: q('fever'), confusion: q('confusion'),
+      bpLyingSys: n('bpLS'), bpLyingDia: n('bpLD'), bpStandSys: n('bpSS'), bpStandDia: n('bpSD'), pulse: n('pulse') };
+    delete state.called[p.id];
+    state.tab = 'today'; render(); toast(L().saved); window.scrollTo(0, 0);
+  });
+  render();
+  fetchLive(state.city);
+})();
+</script>
+
+</body>
+</html>
