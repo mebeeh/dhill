@@ -1,0 +1,111 @@
+{
+ "url": "https://dhill.pages.dev/",
+ "runs": [
+  {
+   "lang": "ar",
+   "scheme": "light",
+   "width": 390,
+   "violations": [],
+   "rulePasses": 162,
+   "overflowX": false,
+   "errors": [
+    "Access to fetch at 'https://api.open-meteo.com/v1/forecast?latitude=21.4225&longitude=39.8262&daily=temperature_2m_max&forecast_days=3&timezone=Asia%2FRiyadh' from origin 'https://dhill.pages.dev' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "Failed to load resource: net::ERR_FAILED"
+   ]
+  },
+  {
+   "lang": "ar",
+   "scheme": "light",
+   "width": 1366,
+   "violations": [],
+   "rulePasses": 162,
+   "overflowX": false,
+   "errors": []
+  },
+  {
+   "lang": "ar",
+   "scheme": "dark",
+   "width": 390,
+   "violations": [],
+   "rulePasses": 162,
+   "overflowX": false,
+   "errors": [
+    "Failed to load resource: the server responded with a status of 429 (Too Many Requests)"
+   ]
+  },
+  {
+   "lang": "ar",
+   "scheme": "dark",
+   "width": 1366,
+   "violations": [],
+   "rulePasses": 162,
+   "overflowX": false,
+   "errors": []
+  },
+  {
+   "lang": "en",
+   "scheme": "light",
+   "width": 390,
+   "violations": [],
+   "rulePasses": 166,
+   "overflowX": false,
+   "errors": []
+  },
+  {
+   "lang": "en",
+   "scheme": "light",
+   "width": 1366,
+   "violations": [],
+   "rulePasses": 162,
+   "overflowX": false,
+   "errors": []
+  },
+  {
+   "lang": "en",
+   "scheme": "dark",
+   "width": 390,
+   "violations": [],
+   "rulePasses": 166,
+   "overflowX": false,
+   "errors": [
+    "Access to fetch at 'https://api.open-meteo.com/v1/forecast?latitude=21.4225&longitude=39.8262&daily=temperature_2m_max&forecast_days=3&timezone=Asia%2FRiyadh' from origin 'https://dhill.pages.dev' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "Failed to load resource: net::ERR_FAILED"
+   ]
+  },
+  {
+   "lang": "en",
+   "scheme": "dark",
+   "width": 1366,
+   "violations": [],
+   "rulePasses": 162,
+   "overflowX": false,
+   "errors": [
+    "Access to fetch at 'https://api.open-meteo.com/v1/forecast?latitude=21.4225&longitude=39.8262&daily=temperature_2m_max&forecast_days=3&timezone=Asia%2FRiyadh' from origin 'https://dhill.pages.dev' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "Failed to load resource: net::ERR_FAILED"
+   ]
+  }
+ ],
+ "functional": {
+  "liveLine": "Live forecast from Open-Meteo · updated 18:46 · move the slider to try a hotter day",
+  "fcTemps": [
+   "37°",
+   "36°",
+   "34°"
+  ],
+  "sliderDefault": "37",
+  "jeddahLive": [
+   "Live forecast unavailable; showing this month’s typical high (2016–2025) · move the slider to try a hotter day",
+   [
+    "33°",
+    "33°",
+    "33°"
+   ]
+  ],
+  "afterPulse": [
+   "Fast pulse (112/min)"
+  ],
+  "statusAfterPulse": "Red",
+  "addOptions": 29,
+  "howHeatRow": "Medicines: none · moderate · two high-risk or lithium · diuretic + ACE/ARB + NSAID"
+ }
+}

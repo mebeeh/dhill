@@ -51,7 +51,7 @@ The app never stops a medicine. Every medicine decision stays with the pharmacis
 | `load13.js`, `results_v1.3_alert_load.json` | Alert load of v1.3 on 2021–2025 weather for symptom-free patients (results below). |
 | `vignettes.js`, `rescore.js` | Test 5. `vignettes.js` rebuilds the 50 fictional test cases from a fixed seed; `rescore.js` re-scores them with any engine version. |
 | `results_pharmacist_agreement_summary.json` | Agreement with the blind pharmacist rating, as counts only (table below). Case-level ratings are not published. |
-| `results_v1.3_accessibility_local.json` | Test 4: axe-core 4.10, WCAG 2.1 AA, on Arabic/English, light/dark and phone/desktop. |
+| `results_v1.3_accessibility_live.json`, `results_v1.3_accessibility_local.json` | Test 4: axe-core 4.10, WCAG 2.1 AA. The live site and a local copy were each checked on 6 screens × Arabic/English × light/dark × phone/desktop = 48 checks, with **0 violations**. |
 | `media/` | Six screens of v1.3 and the 78-second demo video. |
 
 ### Alert load of v1.3 (2021–2025 weather, patient with no symptoms)
